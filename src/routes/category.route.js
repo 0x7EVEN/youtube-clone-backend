@@ -4,9 +4,9 @@ const {getCategories,getCategory,updateCategory,createCategories,deleteCategory}
 const router = express.Router();
 
 router
-    .route("/",)
-    .get(getCategories)
-    .post(createCategories);
+     .route("/",)
+     .get(getCategories)
+     .post(createCategories);
 
 
 router
