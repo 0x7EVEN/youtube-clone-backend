@@ -12,8 +12,11 @@ app.use(express.json());
 
 app.use('/api/v1/categories', categoryRoutes);
 
+app.use("/api/v1/users", userRoutes);
+
 
 const PORT = process.env.PORT || 2000;
+console.log('PORT:', PORT);
 
 app.listen(PORT, async () => {
     await dbConnection();
