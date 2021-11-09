@@ -14,7 +14,11 @@ const categorySchema = new mongoose.Schema({
         type: String,
         minlength: [10, "description must be 10 char long"],
         required: [true, "description is required"],
-
+    },
+    userId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
+        required: true,
     }
 }, {
     versionKey: false,
