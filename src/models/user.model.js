@@ -1,54 +1,87 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const uniqueValidator = require('mongoose-unique-validator');
 
+require("dotenv").config();
 
-const videoSchema = new mongoose.Schema({
-     title: {type: String},
-     description: {type: String, default: "..."},
-     thumbnail: {type: String, default: "default-thumbnail.jpg"},
-     views: {type: Number, default: 0},
-     url: {type: String, defaultUrl: "test.com"},
-     categoryID: {type: mongoose.Schema.ObjectId, ref: "Categories"},
-     userID: {type: mongoose.Schema.ObjectId, ref: "users"},
+const SECRET = process.env.JWT_SECRET;
+console.log('SECRET:', SECRET);
+
+const userSchema = new mongoose.Schema({
+     channelName: {
+          type: String,
+          required: true,
+          unique: true,
+          uniqueCaseInsensitive: true
+     },
+     email: {
+          type: String,
+          required: true,
+          unique: true,
+          uniqueCaseInsensitive: true
+     },
+     photoUrl: {
+          type: String,
+          default: 'no-photo.jpg'
+     },
+     role: {
+          type: String,
+          enum: ['user', 'admin'],
+          default: 'user'
+     },
+     password: {
+          type: String,
+          required: true,
+          minlength: 6,
+          select: false
+     }
 }, {
      toJSON: {virtuals: true},
      toObject: {virtuals: true},
-     timestamps: true,
-     versionKey: false
+     timestamps: true
 });
 
+userSchema.index({channelName: 'text'});
 
-videoSchema.index({title: text, description: text});
-
-videoSchema.virtual("dislike", {
-     ref: "likeDislike",
-     localField: "_id",
-     foreignField: "videoId",
-     justOne: false,
-     count: false,
-     match: {type: 'dislike'}
-});
-
-
-videoSchema.virtual("like", {
-     ref: "likeDislike",
-     localField: "_id",
-     foreignField: "videoId",
-     justOne: false,
-     count: false,
-     match: {type: 'like'}
-});
-
-
-videoSchema.virtual('comments', {
-     ref: 'Comment',
+userSchema.virtual('subscribers', {
+     ref: 'subscription',
      localField: '_id',
-     foreignField: 'videoId',
+     foreignField: 'channelId',
+     justOne: false,
+     count: true,
+     match: {userId: this._id}
+});
+
+userSchema.virtual('videos', {
+     ref: 'video',
+     localField: '_id',
+     foreignField: 'userId',
      justOne: false,
      count: true
 });
 
+userSchema.plugin(uniqueValidator, {message: '{PATH} already exists.'});
 
-const Video = mongoose.model("Video", videoSchema);
+userSchema.pre('find', function() {
+     this.populate({path: 'subscribers'});
+});
 
-module.exports = Video;
-//this is updated user-model
+
+userSchema.pre('save', async function(next) {
+     if (!this.isModified('password')) {
+          next();
+     }
+     const salt = await bcrypt.genSalt(10);
+     this.password = await bcrypt.hash(this.password, salt);
+});
+
+userSchema.methods.matchPassword = async function(incomingPassword) {
+     return await bcrypt.compare(incomingPassword, this.password);
+};
+
+UserSchema.methods.getSignedJwtToken = function() {
+     return jwt.sign({id: this._id}, SECRET);
+};
+
+module.exports = mongoose.model('user', UserSchema);
