@@ -40,7 +40,7 @@ videoSchema.virtual("like", {
 
 
 videoSchema.virtual('comments', {
-     ref: 'Comment',
+     ref: 'comment',
      localField: '_id',
      foreignField: 'videoId',
      justOne: false,
@@ -48,7 +48,7 @@ videoSchema.virtual('comments', {
 });
 
 
-const Video = mongoose.model("Video", videoSchema);
+const Video = mongoose.model("video", videoSchema);
 
 module.exports = Video;
 //this is updated user-model

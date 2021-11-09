@@ -84,4 +84,4 @@ UserSchema.methods.getSignedJwtToken = function() {
      return jwt.sign({id: this._id}, SECRET);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('user', UserSchema);
