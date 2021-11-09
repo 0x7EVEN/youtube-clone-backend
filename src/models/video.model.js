@@ -7,8 +7,8 @@ const videoSchema = new mongoose.Schema({
      thumbnail: {type: String, default: "default-thumbnail.jpg"},
      views: {type: Number, default: 0},
      url: {type: String, defaultUrl: "test.com"},
-     categoryID: {type: mongoose.Schema.ObjectId, ref: "Categories"},
-     userID: {type: mongoose.Schema.ObjectId, ref: "users"},
+     categoryID: {type: mongoose.Schema.ObjectId, ref: "category"},
+     userID: {type: mongoose.Schema.ObjectId, ref: "user"},
 }, {
      toJSON: {virtuals: true},
      toObject: {virtuals: true},
