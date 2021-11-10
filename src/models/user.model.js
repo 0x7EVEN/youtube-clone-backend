@@ -5,7 +5,11 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 require("dotenv").config();
 
+<<<<<<< HEAD
 const SECRET = process.env.JWT_SECRET;
+=======
+const SECRET = process.env.SECRET;
+>>>>>>> 0f812a5f397c2194103295261b41e9d935293c50
 console.log('SECRET:', SECRET);
 
 const userSchema = new mongoose.Schema({
@@ -80,8 +84,8 @@ userSchema.methods.matchPassword = async function(incomingPassword) {
      return await bcrypt.compare(incomingPassword, this.password);
 };
 
-UserSchema.methods.getSignedJwtToken = function() {
+userSchema.methods.getSignedJwtToken = function() {
      return jwt.sign({id: this._id}, SECRET);
 };
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model('user', userSchema);
