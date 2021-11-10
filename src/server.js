@@ -3,6 +3,7 @@ const express = require("express");
 const dbConnection = require("./configs/db");
 const categoryRoutes = require('./routes/category.route');
 const commentRoutes = require("./controllers/comment.controller");
+const videoRoute = require("./routes/video.route");
 const errorHandler = require("./middlewares/error.middleware");
 
 const PORT = process.env.PORT || 2000;
@@ -17,6 +18,7 @@ app.use(express.json());
 const userController = require("./controllers/user.controller");
 
 
+app.use(videoRoute);
 app.use(errorHandler);
 app.use('/categories', categoryRoutes);
 app.use("/comment", commentRoutes);
