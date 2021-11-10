@@ -1,6 +1,7 @@
 const express = require("express");
 const dbConnection = require("./configs/db");
 const categoryRoutes = require('./routes/category.route');
+const videoRoute = require("./routes/video.route")
 const errorHandler = require("./middlewares/error.middleware");
 
 
@@ -15,6 +16,7 @@ const userController = require("./controllers/user.controller");
 app.use('/categories', categoryRoutes);
 
 app.use("/api/v1/users", userController);
+app.use(videoRoute)
 app.use(errorHandler);
 // app.use("/api/v1/users", userRoutes);
 
