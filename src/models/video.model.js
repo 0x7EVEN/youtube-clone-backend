@@ -17,7 +17,7 @@ const videoSchema = new mongoose.Schema({
 });
 
 
-videoSchema.index({title: text, description: text});
+videoSchema.index({title: "text", description: "text"});
 
 videoSchema.virtual("dislike", {
      ref: "likeDislike",

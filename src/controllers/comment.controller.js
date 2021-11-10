@@ -1,7 +1,7 @@
-const asyncHandler = require('../middleware/async');
-const ErrorResponse = require('../utils/errorResponse');
-const Comment = require('../models/Comment');
-const Video = require('../models/Video');
+const asyncHandler = require('../middlewares/asyncHandler.middleware');
+const ErrorResponse = require('../utils/errorResponse.util');
+const Comment = require('../models/comment.model');
+const Video = require('../models/video.model');
 
 
 
@@ -14,11 +14,7 @@ exports.getCommentByVideoId = asyncHandler(async (req, res, next) => {
           .populate('userId')
           .sort('-createdAt');
      if (!comments) {
-          return next(
-               new ErrorResponse(
-                    `No comments`
-               )
-          );
+          return next(new ErrorResponse(`No comments`));
      }
      return res.status(200).json({sucess: true, data: comments});
 });
