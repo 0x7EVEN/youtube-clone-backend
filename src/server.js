@@ -1,18 +1,14 @@
 const express = require("express");
 const dbConnection = require("./configs/db");
 const categoryRoutes = require('./routes/category.route');
-
-require("dotenv").config();
-
-
 const app = express();
-
 app.use(express.json());
 
+const userController = require("./controllers/user.controller");
 
 app.use('/categories', categoryRoutes);
 
-app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/users", userController);
 
 
 const PORT = process.env.PORT || 2000;
