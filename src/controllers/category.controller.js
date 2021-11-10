@@ -1,6 +1,6 @@
 const Category = require("../models/category.model");
 const ErrorResponse = require("../utils/errorResponse.util")
-const asyncHandler = require("../middlewares/asyncHandler.middleware");
+const asyncHandler = require("../middleware/asyncHandler.middleware");
 
 
 
