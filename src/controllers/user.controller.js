@@ -19,7 +19,10 @@ router.post("/", uplaod.any(), async function(req, res) {
      console.log(req.body);
      try {
           const user = await User.create(req.body);
-          return res.send(user);
+
+          const token = user.getSignedJwtToken();
+          console.log('token:', token);
+          return res.status(200).json({user, token});
      } catch (err) {
           res.send(err.message);
      }
