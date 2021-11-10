@@ -5,11 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 require("dotenv").config();
 
-<<<<<<< HEAD
-const SECRET = process.env.JWT_SECRET;
-=======
 const SECRET = process.env.SECRET;
->>>>>>> 0f812a5f397c2194103295261b41e9d935293c50
 console.log('SECRET:', SECRET);
 
 const userSchema = new mongoose.Schema({
