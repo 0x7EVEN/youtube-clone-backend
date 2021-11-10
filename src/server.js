@@ -11,11 +11,16 @@ const app = express();
 app.use(express.json());
 
 const userController = require("./controllers/user.controller");
+// const {register, login} = require("./controllers/auth.controller");
 
-app.use('/categories', categoryRoutes);
 
-app.use("/api/v1/users", userController);
 app.use(errorHandler);
+app.use('/categories', categoryRoutes);
+app.use("/users", userController);
+// app.use("/register", register);
+// app.use("/login", login);
+
+
 // app.use("/api/v1/users", userRoutes);
 
 
