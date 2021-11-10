@@ -2,12 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const dbConnection = require("./configs/db");
 const categoryRoutes = require('./routes/category.route');
-const commentRoutes = require("./controllers/comment.controller");
+const commentRoutes = require("./routes/comments.routes");
 const videoRoute = require("./routes/video.route");
-const errorHandler = require("./middlewares/error.middleware");
-
 const errorHandler = require("./middleware/error.middleware");
-
+const userController = require("./controllers/user.controller");
 
 
 const app = express();
@@ -20,13 +18,12 @@ const videoController = require("./controllers/video.controller");
 const feelingController = require("./routes/feelings.route");
 
 
-app.use("/api/v1/users", userController);
 app.use("/videos", videoController);
 app.use("/feeling", feelingController);
 
 app.use(errorHandler);
 app.use('/categories', categoryRoutes);
-app.use("/comment", commentRoutes);
+// app.use("/comment", commentRoutes);
 app.use("/users", userController);
 // app.use("/register", register);
 // app.use("/login", login);

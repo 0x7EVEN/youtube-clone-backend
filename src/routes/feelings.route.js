@@ -7,10 +7,10 @@ const {
 
 const router = express.Router();
 
-// router.route("/").post(createFeeling);
+router.route("/").post(createFeeling);
 
-// router.route("/check").post(checkFeeling);
+router.route("/check").post(checkFeeling);
 
-// router.route("/videos").get(getLikedVideos);
+router.route("/videos").get(getLikedVideos);
 
 module.exports = router;

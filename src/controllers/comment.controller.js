@@ -1,4 +1,4 @@
-const asyncHandler = require('../middlewares/asyncHandler.middleware');
+const asyncHandler = require('../middleware/asyncHandler.middleware');
 const ErrorResponse = require('../utils/errorResponse.util');
 const Comment = require('../models/comment.model');
 const Video = require('../models/video.model');

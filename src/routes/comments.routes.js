@@ -4,7 +4,7 @@ const {
      getCommentByVideoId,
      createComment,
      deleteComment
-} = require('../controllers/comments');
+} = require('../controllers/comment.controller');
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router
      .route('/')
      .post(createComment);
 
-router.route('/:id').put(updateComment).delete(deleteComment);
+router.route('/:id').delete(deleteComment);
 
 router.route('/:videoId/videos').get(getCommentByVideoId);
 
