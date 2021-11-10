@@ -1,6 +1,6 @@
 const express = require("express");
 const dbConnection = require("./configs/db");
-const categoryRoutes = require('./routes/category.route');
+const categoryRoutes = require('./routes/category.routes');
 const errorHandler = require("./middlewares/error.middleware");
 
 
