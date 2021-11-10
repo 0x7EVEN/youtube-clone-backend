@@ -4,21 +4,22 @@ const router = express.Router();
 
 
 const User = require("../models/user.model");
-
+const uplaod = require("../utils/uploader");
 
 router.get("/", async function(req, res) {
      try {
           const users = await User.find().lean().exec();
-          return res.sendStatus(200).json({users});
+          return res.send(users);
      } catch (err) {
-          return res.sendStatus(401).send(err.message);
+          return res.send(err.message);
      }
 });
 
-router.post("/", async function(req, res) {
+router.post("/", uplaod.any(), async function(req, res) {
+     console.log(req.body);
      try {
           const user = await User.create(req.body);
-          return res.sendStatus(201).json({user});
+          return res.send(user);
      } catch (err) {
           res.send(err.message);
      }
@@ -48,3 +49,6 @@ router.patch("/:id", async function(req, res) {
           return res.send(err.message);
      }
 });
+
+
+module.exports = router;
