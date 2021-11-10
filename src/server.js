@@ -1,21 +1,25 @@
 const express = require("express");
 const dbConnection = require("./configs/db");
 const categoryRoutes = require('./routes/category.route');
-const errorHandler = require("./middlewares/error.middleware");
+const errorHandler = require("./middleware/error.middleware");
 
 
 require("dotenv").config();
 
-const videoController = require("./controllers/video.controller.js");
 
 const app = express();
 app.use(express.json());
 
 const userController = require("./controllers/user.controller");
+const videoController = require("./controllers/video.controller");
+// const feelingController = require("./controllers/feelings.controller");
 
 app.use('/categories', categoryRoutes);
 
 app.use("/api/v1/users", userController);
+app.use("/videos", videoController);
+// app.use("/feeling", feelingController);
+
 app.use(errorHandler);
 // app.use("/api/v1/users", userRoutes);
 

@@ -2,7 +2,7 @@ const asyncHandler = require("../middleware/asyncHandler.middleware");
 const ErrorResponse = require("../utils/errorResponse.util");
 const advancedResultsFunc = require("../utils/advancedResultsFunc.util");
 
-const Video = require("../models/video.model");
+const Video = require("../models/video.model");   
 const Feeling = require("../models/likeDislike.model");
 
 // @desc    Create feeling
