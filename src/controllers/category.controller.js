@@ -1,52 +1,60 @@
 const Category = require("../models/category.model");
+const ErrorResponse = require("../utils/errorResponse.util")
+const asyncHandler = require("../middlewares/asyncHandler.middleware");
+
 
 
 // @desc get categories
 //@route  GET /categories
-module.exports.getCategories = async (req, res, next) => {
-    try {
-        const categories = await Category.find().lean().exec();
-        return res.status(200).json({success: true, data: categories});
-    } catch (err) {
-        return res.status(2001).send(err.message);
-    }
-};
+module.exports.getCategories =asyncHandler( async (req, res, next) => {
+    const categories = await Category.find().lean().exec();
+    return res.status(200).json({ success: true, data: categories });
+  
+});
 
 // @desc get categories
 //@route  GET/categories/:id
-module.exports.getCategory = async (req, res, next) => {
-    try {
-        const category = await Category.findOne({id: req.params.id});
-        if (!category) {
-            return res.status(400).json({success: true, error: "No category found"});
-        }
-        console.log(category);
-        return res.status(200).json({success: true, data: category});
-    } catch (err) {
-        return res.status(2001).send(err.message);
+module.exports.getCategory =asyncHandler( async (req, res, next) => {
+    const category = await Category.findById(req.params.id)
+    if(!category){
+     
+     return next(new ErrorResponse(`NO category found with id ${req.params.id}`,404))
+      // return res.status(200).json({success:false, error:"invalid id"})
     }
-};
-
+    return res.status(200).json({success:true, category: category})
+  
+});
 
 //create category
-module.exports.createCategories = async (req, res, next) => {
-    try {
-        const category = await Category.create(req.body);
-        return res.status(200).json({success: true, data: category});
-    } catch (err) {
-        return res.status(400).json({success: false, error: err.message});
-    }
-};
+module.exports.createCategories =asyncHandler( async (req, res, next) => {
 
-//update category
-module.exports.updateCategory = async (req, res, next) => {
-    try {
-        const category = await Category.findByIdAndUpdate(req.params.id, req.body);
-        if (!category) {
-            return res.status(400).json({success: true, error: `no category with the id ${req.params.id}`});
-        }
-        return res.status(200).json({success: true, data: category});
-    } catch (err) {
-        return res.status(400).json({success: false, error: err.message});
-    }
-};
+    const category = await Category.create(req.body);
+    return res.status(200).json({ success: true, data: category });
+});
+
+//update category 
+//PUT categories/:id
+module.exports.updateCategory =asyncHandler( async (req, res, next) => {
+  
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body);
+    if(!category){
+     
+      return next(new ErrorResponse(`NO category found with id ${req.params.id}`,404))
+       // return res.status(200).json({success:false, error:"invalid id"})
+     }
+    return res.status(200).json({ success: true, data: category });
+  
+});
+
+//Find by ID and delete
+// DELETE /categories/:id
+module.exports.deleteCategory =asyncHandler( async (req, res, next) => {
+      const category = await Category.findByIdAndDelete(req.params.id);
+      if(!category){
+     
+        return next(new ErrorResponse(`NO category found with id ${req.params.id}`,404))
+         // return res.status(200).json({success:false, error:"invalid id"})
+       }
+      return res.status(200).json({ success: true, data: category });
+    
+  });
