@@ -7,14 +7,10 @@ const {
 
 const router = express.Router();
 
-const { protect } = require("../middleware/auth.middleware");
+// router.route("/").post(createFeeling);
 
-router.use(protect);
+// router.route("/check").post(checkFeeling);
 
-router.route("/").post(createFeeling);
-
-router.route("/check").post(checkFeeling);
-
-router.route("/videos").get(getLikedVideos);
+// router.route("/videos").get(getLikedVideos);
 
 module.exports = router;

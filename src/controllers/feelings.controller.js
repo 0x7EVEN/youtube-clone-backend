@@ -2,17 +2,13 @@ const asyncHandler = require("../middleware/asyncHandler.middleware");
 const ErrorResponse = require("../utils/errorResponse.util");
 const advancedResultsFunc = require("../utils/advancedResultsFunc.util");
 
-const Video = require("../models/video.model");   
+const Video = require("../models/video.model");
 const Feeling = require("../models/likeDislike.model");
 
-// @desc    Create feeling
-// @route   POST /api/v1/feelings/
-// @access  Private
 exports.createFeeling = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user._id;
-  const { type, userId, videoId } = req.body;
+  const {type, userId, videoId} = req.body;
 
-  // check video
   const video = await Video.findById(videoId);
   if (!video) {
     return next(new ErrorResponse(`No video with video id of ${videoId}`));
@@ -26,12 +22,10 @@ exports.createFeeling = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Check if feeling exists
   let feeling = await Feeling.findOne({
     videoId,
     userId,
   });
-  // if not - create feeling
 
   if (!feeling) {
     feeling = await Feeling.create({
@@ -39,23 +33,20 @@ exports.createFeeling = asyncHandler(async (req, res, next) => {
       videoId,
       userId,
     });
-    return res.status(200).json({ success: true, data: feeling });
+    return res.status(200).json({success: true, data: feeling});
   }
-  // else - check req.body.feeling if equals to feeling.type remove
+
   if (type == feeling.type) {
     await feeling.remove();
-    return res.status(200).json({ success: true, data: {} });
+    return res.status(200).json({success: true, data: {}});
   }
-  // else - change feeling type
+
   feeling.type = type;
   feeling = await feeling.save();
 
-  res.status(200).json({ success: true, data: feeling });
+  res.status(200).json({success: true, data: feeling});
 });
 
-// @desc    Check feeling
-// @route   POST /api/v1/feelings/check
-// @access  Private
 exports.checkFeeling = asyncHandler(async (req, res, next) => {
   const feeling = await Feeling.findOne({
     videoId: req.body.videoId,
@@ -63,17 +54,14 @@ exports.checkFeeling = asyncHandler(async (req, res, next) => {
   });
 
   if (!feeling) {
-    return res.status(200).json({ success: true, data: { feeling: "" } });
+    return res.status(200).json({success: true, data: {feeling: ""}});
   }
 
   return res
     .status(200)
-    .json({ success: true, data: { feeling: feeling.type } });
+    .json({success: true, data: {feeling: feeling}});
 });
 
-// @desc    Get liked videos
-// @route   GET /api/v1/feelings/videos
-// @access  Private
 exports.getLikedVideos = asyncHandler(async (req, res, next) => {
   const likes = await Feeling.find({
     userId: req.user._id,
@@ -81,7 +69,7 @@ exports.getLikedVideos = asyncHandler(async (req, res, next) => {
   });
 
   if (likes.length === 0)
-    return res.status(200).json({ success: true, data: {} });
+    return res.status(200).json({success: true, data: {}});
 
   const videosId = likes.map((video) => {
     return {
@@ -89,6 +77,6 @@ exports.getLikedVideos = asyncHandler(async (req, res, next) => {
     };
   });
 
-  const populates = [{ path: "userId", select: "photoUrl channelName" }];
+  const populates = [{path: "userId", select: "photoUrl channelName"}];
   advancedResultsFunc(req, res, Video, populates, "public", videosId);
 });
