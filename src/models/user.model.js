@@ -1,87 +1,34 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const uniqueValidator = require('mongoose-unique-validator');
-
-require("dotenv").config();
-
-const SECRET = process.env.SECRET;
-console.log('SECRET:', SECRET);
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-     channelName: {
-          type: String,
-          required: true,
-          unique: true,
-          uniqueCaseInsensitive: true
-     },
-     email: {
-          type: String,
-          required: true,
-          unique: true,
-          uniqueCaseInsensitive: true
-     },
-     photoUrl: {
-          type: String,
-          default: 'no-photo.jpg'
-     },
-     role: {
-          type: String,
-          enum: ['user', 'admin'],
-          default: 'user'
-     },
-     password: {
-          type: String,
-          required: true,
-          minlength: 6,
-          select: false
-     }
-}, {
-     toJSON: {virtuals: true},
-     toObject: {virtuals: true},
-     timestamps: true
-});
+    username:{
+        type: String, 
+        required:[true, "Usser name is required to create user"],
+        unique:[true, "Account with this user name is already exist"]
+    },
+    email:{
+        type:String,
+        required:[true, "Email is required to create account"],
+        unique: [true, "User already exist with this email"]
+    },
+    password:{
+        type:String,
+        required:[true, "password is required to create account "],
+        minlength:[6, "password length should be atleast 6 char long"]
+    },
+    videos:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'videos'
+    },
+    subscribers:{
+        type:Array,
+        default:[]
+    },
+    userSubscribedChannel:{
+        type:Array,
+        default:[]
+    },
 
-userSchema.index({channelName: 'text'});
+})
 
-userSchema.virtual('subscribers', {
-     ref: 'subscription',
-     localField: '_id',
-     foreignField: 'channelId',
-     justOne: false,
-     count: true,
-     match: {userId: this._id}
-});
-
-userSchema.virtual('videos', {
-     ref: 'video',
-     localField: '_id',
-     foreignField: 'userId',
-     justOne: false,
-     count: true
-});
-
-userSchema.plugin(uniqueValidator, {message: '{PATH} already exists.'});
-
-userSchema.pre('find', function() {
-     this.populate({path: 'subscribers'});
-});
-
-
-userSchema.pre('save', async function(next) {
-     if (!this.isModified('password')) {
-          next();
-     }
-     const salt = await bcrypt.genSalt(10);
-     this.password = await bcrypt.hash(this.password, salt);
-});
-
-userSchema.methods.matchPassword = async function(incomingPassword) {
-     return await bcrypt.compare(incomingPassword, this.password);
-};
-
-userSchema.methods.getSignedJwtToken = function() {
-     return jwt.sign({id: this._id}, SECRET);
-};
-
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model("user", userSchema);

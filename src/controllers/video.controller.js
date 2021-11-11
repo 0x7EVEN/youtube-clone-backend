@@ -1,22 +1,48 @@
-const express = require("express");
+const videoModel = require("../models/video.model")
+const fs = require("fs")
+class videoController{
+    async upload(req,res){
+        const newVideo = new videoModel({
+            owner:req.token._id,
+            name:req.body.name,
+            videopath:req.filename
+        })
+        try{
+            const saveVideo = await newVideo.save();
+            return res.status(201).json({msg:"video uploaded successfully"});
+        }catch(err){
+            return res.status(500).json({msg:"video upload failed"});
+        }
+        // console.log("filename", req.filename);
+        // console.log("video name", req.body.name);
+        // console.log("token", req.token)
+        // return res.status(200).json({msg:"Authenticated"});
+    }
 
-const router = express.Router();
+    //streaming video
+    stream(req,res){
+        const range = req.headers.range;
 
-const Video = require("../models/video.model");
+        if(!range){
+            return res.status(400).json({msg:"range header is required to start stream"});
+        }
+        const videoPath = `src/videos/${req.params.filename}`;
+        const videoSize = fs.statSync(videoPath).size;
 
-router.post("/", async function (req, res) {
-  const video = await Video.create(req.body);
+        const start = Number(range.replace(/\D/g,""));
+        const chunk_size  = 10 **6 // 1mb;
+        const end = Math.min(start + chunk_size, videoSize-1);
+        const contentLength = end - start +1;
+        const headers  = {
+            'Conte-Length':contentLength,
+            'Accept-Range': 'bytes',
+            'Content-Type': 'video/mp4',
+            'Content-Range':`bytes ${start}-${end}/${videoSize}`
+        }
+        res.writeHead(206, headers);
+        const videoStream = fs.createReadStream(videoPath, {start, end});
+        videoStream.pipe(res);
+    }
+}
 
-  return res.send(video);
-});
-
-router.get("/", async function (req, res) {
-  const videos = await Video.find().lean().exec();
-
-  return res.send(videos);
-});
-
-// router.get("/", async function (req, res) {});
-
-
-module.exports = router
+module.exports = videoController;
