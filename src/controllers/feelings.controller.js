@@ -1,4 +1,4 @@
-const asyncHandler = require("../middleware/asyncHandler.middleware");
+const asyncHandler = require("../middleware/asyncHandler.old.middleware");
 const ErrorResponse = require("../utils/errorResponse.util");
 const advancedResultsFunc = require("../utils/advancedResultsFunc.util");
 

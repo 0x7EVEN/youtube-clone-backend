@@ -1,9 +1,9 @@
-const asyncHandler = require('../middleware/asyncHandler.middleware');
+const asyncHandler = require('../middleware/asyncHandler.old.middleware');
 const ErrorResponse = require('../utils/errorResponse.util');
 const advancedResultsFunc = require('../utils/advancedResultsFunc.util');
 
 const Video = require('../models/video.model');
-const Subscription = require('../models/subscibers.model');
+const Subscription = require('../models/subscibers.old.model');
 
 // @desc    Get all subscribers
 // @route   GET /api/v1/subscriptions/subscribers
