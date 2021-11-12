@@ -4,14 +4,15 @@ const uuid = require("uuid");
 const uuidv4 = uuid.v4;
 
 const videoStorage = multer.diskStorage({
-    destination: 'src/videos',
+    destination: 'videos',
     filename: (req, file, cb) => {
         const id = uuidv4();
-        const token = req.token;
-        console.log("token--->", token);
-        const filename = `${token.username.toString()}-${id}`;
-        req.filename = filename;
-        cb(null, filename);
+        // const token = req.token;
+        // console.log("token--->", token);
+        // const filename = `${token.username.toString()}-${Math.round(Math.random() * 1000000000)}-${id}`;
+        // req.filename = filename;
+        console.log('file:', file);
+        cb(null, "" + Date.now() + Math.round(Math.random() * 1000000000) + file.originalname);
     }
 });
 const videUpload = multer({

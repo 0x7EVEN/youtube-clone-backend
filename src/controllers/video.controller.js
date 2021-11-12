@@ -5,13 +5,13 @@ class videoController {
         console.log("constructor called ---------------------------");
     }
     async upload (req, res) {
-        console.log('req:', req.files);
-        console.log(("files  :", req.files));
+        console.log('req : ------===--->', req.files);
+        console.log("files  :", req.files);
         const newVideo = new videoModel({
             owner: req.token._id,
             name: req.body.name,
-            thumbnail: req.filename[0],
-            videopath: req.filename[1]
+            thumbnail: req.files[0].path,
+            videopath: req.files[1].path
         });
         try {
             const saveVideo = await newVideo.save();
