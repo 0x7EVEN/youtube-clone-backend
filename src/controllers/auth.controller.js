@@ -27,7 +27,7 @@ class AuthController{
                 const savedAccount = await newAccount.save();
                 return res.status(201).json({msg:"account created successfully"})
             }catch(err){
-                return res.status(500).json({msg:"failed to create account"});
+                return res.status(500).json({msg:err.message});
             }
         })
     }
