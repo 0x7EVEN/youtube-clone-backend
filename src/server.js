@@ -19,15 +19,15 @@ const videoController = require("./controllers/video.controller");
 const feelingController = require("./routes/feelings.route");
 const subscibersRoute = require("./routes/subscribe.routes");
 
-//app.use("/feeling", feelingController);
+// app.use("/feeling", feelingController);
 
-//app.use(errorHandler);
-//app.use('/categories', categoryRoutes);
-//app.use("/api/video", videoController);
-// app.use("/comment", commentRoutes);
-//app.use("/users", userController);
-// app.use("/register", register);
-// app.use("/login", login);
+app.use(errorHandler);
+app.use('/categories', categoryRoutes);
+app.use("/api/video", videoController);
+app.use("/comment", commentRoutes);
+app.use("/users", userController);
+// app.use("/register", register); //won't work
+// app.use("/login", login);  //won't work
 app.use("/subscribe", subscibersRoute);
 
 // app.use("/api/v1/users", userRoutes);
