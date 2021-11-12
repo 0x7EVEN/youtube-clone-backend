@@ -5,7 +5,7 @@ const dbConnection = require("./configs/db");
 // const commentRoutes = require("./routes/comments.routes");
 // const errorHandler = require("./middleware/error.middleware");
 // const userController = require("./controllers/user.controller");
-const AuthRoutes = require("./routes/auth.route")
+const AuthRoutes = require("./routes/auth.route");
 const VideoRoutes = require("./routes/video.routes");
 require("dotenv").config();
 const app = express();
@@ -15,9 +15,9 @@ app.use(express.json());
 
 
 // const {register, login} = require("./controllers/auth.controller");
-//const videoController = require("./controllers/video.controller");
-//const feelingController = require("./routes/feelings.route");
-
+const videoController = require("./controllers/video.controller");
+const feelingController = require("./routes/feelings.route");
+const subscibersRoute = require("./routes/subscribe.routes");
 
 //app.use("/feeling", feelingController);
 
@@ -28,16 +28,19 @@ app.use(express.json());
 //app.use("/users", userController);
 // app.use("/register", register);
 // app.use("/login", login);
-
-
-// app.use("/api/v1/users", userRoutes);
+app.use("/subscribe", subscibersRoute);
 
 // app.use("/api/v1/users", userRoutes);
+
+// app.use("/api/v1/users", userRoutes);
+app.use(async function(req, res) {
+    res.send("404");
+});
 
 
 //=============================================Server Endpoints================================
 app.use(AuthRoutes);
-app.use(VideoRoutes)
+app.use(VideoRoutes);
 
 
 
