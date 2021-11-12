@@ -5,10 +5,6 @@ const userModel = require("../models/user.model");
 require("dotenv").config();
 const jsonWebToken = require("jsonwebtoken");
 
-const KEY = process.env.COOKIE_KEY;
-console.log('KEY:', KEY);
-
-
 class AuthController {
     // sign up method
     signUp (req, res) {
@@ -19,24 +15,20 @@ class AuthController {
                     msg: "Netwrok Error failed to create account, please try again later"
                 });
             }
-            const {username, email, password, channelName} = fields;
-            console.log(username, email, password);
+            const {username, email, password, } = fields;
             const salt = await bcrypt.genSalt(15);
             const hashedPassword = await bcrypt.hash(password, salt);
             const newAccount = new userModel({
                 username,
                 email,
-                password: hashedPassword,
-                channelName
+                password: hashedPassword
             });
-            console.log('newAccount:', newAccount);
             try {
                 const savedAccount = await newAccount.save();
-                console.log('savedAccount:', savedAccount);
-                const token = jsonWebToken.sign({username, password, email, channelName}, KEY, {expiresIn: '365d'});
+                const token = jsonWebToken.sign({username, email, password}, process.env.COOKIE_KEY, {expiresIn: '365d'});
                 return res.status(201).json({msg: "account created successfully", token});
             } catch (err) {
-                return res.status(500).json({msg: "failed to create account", err: err.message});
+                return res.status(500).json({msg: "failed to create account"});
             }
         });
     }

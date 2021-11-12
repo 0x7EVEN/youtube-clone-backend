@@ -7,8 +7,8 @@ const errorHandler = require("./middleware/error.old.middleware");
 const AuthRoutes = require("./routes/auth.route");
 const VideoRoutes = require("./routes/video.routes");
 const subscibersRoute = require("./routes/subscribe.routes");
-const videoController = require("./controllers/video.controller");
-const {register, login} = require("./controllers/auth.controller");
+// const videoController = require("./controllers/video.controller");
+
 const app = express();
 app.use(express.json());
 app.use(errorHandler);
@@ -21,7 +21,7 @@ app.use(errorHandler);
 // app.use("/feeling", feelingController);
 
 // app.use('/categories', categoryRoutes);
-app.use("/api/video", videoController);
+// app.use("/api/video",);
 app.use("/comment", commentRoutes);
 // app.use("/register", register); //won't work
 // app.use("/login", login);  //won't work

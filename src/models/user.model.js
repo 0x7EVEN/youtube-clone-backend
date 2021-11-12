@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    channelName: {
+    username: {
         type: String,
         required: [true, "Usser name is required to create user"],
         unique: [true, "Account with this user name is already exist"]
@@ -30,6 +30,4 @@ const userSchema = new mongoose.Schema({
     },
 
 });
-userSchema.index({channelName: "text"});
-
 module.exports = mongoose.model("user", userSchema);
