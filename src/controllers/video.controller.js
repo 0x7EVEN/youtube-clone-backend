@@ -32,7 +32,7 @@ class videoController {
         if (!range) {
             return res.status(400).json({msg: "range header is required to start stream"});
         }
-        const videoPath = `src/videos/${req.params.filename}`;
+        const videoPath = `videos/${req.params.filename}`;
         const videoSize = fs.statSync(videoPath).size;
 
         const start = Number(range.replace(/\D/g, ""));
